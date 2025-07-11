@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +14,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useUser();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +29,21 @@ export default function Login() {
         title: "Login successful!",
         description: `Welcome back, ${user.name}`,
       });
+
+      // Redirect based on user role
+      switch (user.role) {
+        case "admin":
+          navigate("/admin");
+          break;
+        case "user":
+          navigate("/user");
+          break;
+        case "store_owner":
+          navigate("/store-owner");
+          break;
+        default:
+          navigate("/login");
+      }
     } else {
       toast({
         title: "Login failed",
